@@ -24,3 +24,13 @@ updated with the Deterministic Policy Gradient.
 
 We update weights of the critic network
 𝑊𝑘+1 = 𝑊𝑘 + α 𝜕𝐽/𝜕θ
+
+
+### Actor Network
+The actor network takes states. And we used for it 2 hidden layers with 300 and 600 hidden units. The output consists of 3 continuous actions, Steering, which is a single unit with tanh activation function. Acceleration, which is a single unit with sigmoid activation function. Brake, another single unit with sigmoid activation function, then we updated the Actor Network from the gradients computed from the Critic Network.
+
+
+### Critic Network
+The critic network takes both the states and action as inputs and outputs the Q-Value. We used 4 hidden layers with 300 then 600 hidden units for the states and 600 hidden units for the actions then the last hidden layer has 600 hidden units. 
+
+
