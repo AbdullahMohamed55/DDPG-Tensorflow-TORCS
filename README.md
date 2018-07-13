@@ -27,12 +27,12 @@ gradients obtained from the loss function. Also, remember that the actor network
 
 updated with the Deterministic Policy Gradient.
 <p align="center">
-  <img width="280" height="90" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/PG.PNG">
+  <img width="260" height="90" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/PG.PNG">
 </p>
 
 We update weights of the critic network
 <p align="center">
-  <img width="230" height="100" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/weights.PNG">
+  <img width="230" height="90" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/weights.PNG">
 </p>
 
 
@@ -43,6 +43,7 @@ The actor network takes states. And we used 2 hidden layers with 300 and 600 hid
 ### Critic Network
 The critic network takes both the states and action as inputs, and outputs the Q-Value. 
 
-We used 4 hidden layers: * 2 hidden layers with 300 then 600 hidden units for the states  
-                         * 600 hidden units for the actions 
-                         * the last hidden layer has 600 hidden units merging the output of action and state hidden layers together. 
+We used 4 hidden layers: 
+* 2 hidden layers with 300 then 600 hidden units for the states  
+- 600 hidden units for the actions 
+- the last hidden layer has 600 hidden units merging the output of action and state hidden layers together. 
