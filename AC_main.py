@@ -34,15 +34,23 @@ def playGame(train_indicator=0):    #1 means Train, 0 means simply Run
     indicator = 0
 
     #Tensorflow GPU optimization
+    # config = tf.ConfigProto()
+    # config.gpu_options.allow_growth = True
+    # G = tf.Graph()
+    # sess = tf.Session(config=config)
+    # tf.reset_default_graph()
+    tf.reset_default_graph()
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)
-    from keras import backend as K
-    # K.set_session(sess)
-
-    critic = Critic(sess, BATCH_SIZE, TAU, LRC)
-    actor = Actor(sess, BATCH_SIZE, TAU, LRA)
     
+
+    actor = Actor(sess, BATCH_SIZE, TAU, LRA)
+    critic = Critic(sess, BATCH_SIZE, TAU, LRC)
+
+    sess.run(tf.global_variables_initializer())
+    # actor = Actor( BATCH_SIZE, TAU, LRA)
+    # critic = Critic( BATCH_SIZE, TAU, LRC)
     buff = ReplayBuffer(BUFFER_SIZE)    #Create replay buffer
 
     # Generate a Torcs environment
@@ -106,7 +114,7 @@ def playGame(train_indicator=0):    #1 means Train, 0 means simply Run
             new_states = np.asarray([e[3] for e in batch])
             dones = np.asarray([e[4] for e in batch])
             y_t = np.asarray([e[1] for e in batch])
-            print("hey",new_states.shape)
+            # print("hey",new_states.shape)
             target_q_values = critic.target_predict([new_states, actor.target_predict(new_states)])  
            
             for k in range(len(batch)):
@@ -116,9 +124,14 @@ def playGame(train_indicator=0):    #1 means Train, 0 means simply Run
                     y_t[k] = rewards[k] + GAMMA*target_q_values[k]
        
             if (train_indicator):
-                loss += critic.train([states,actions], y_t) 
+                # print("main",states.dtype)
+                # print("main",actions.dtype)
+                # print("main",y_t.dtype)
                 a_for_grad = actor.predict(states)
+                # loss += critic.train([states,actions], y_t) 
+                critic.train([states,actions], y_t) 
                 grads = critic.gradients(states, a_for_grad)
+                # print("grads : ",grads.dtype)
                 actor.train(states, grads)
                 actor.target_train()
                 critic.target_train()
