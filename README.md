@@ -19,17 +19,21 @@ DDPG uses this. Directly updating the actor and critic neural network weights wi
 
 Accordingly, here are the equations for the TD target and the loss function for the critic network.
 <p align="center">
-  <img width="500" height="100" src="https://ibb.co/dqrZgo">
+  <img width="500" height="100" src="https://drive.google.com/file/d/1mOrwPXPzCVY0DuFYoOh1Ea8MHPRGwKsL/view?usp=sharing">
 </p>
 
 Now, as mentioned above, the weights of the critic network can be updated with the
 gradients obtained from the loss function. Also, remember that the actor network is
 
 updated with the Deterministic Policy Gradient.
-𝐽 ≈1/𝑁 ∑ ∑ 𝑅(𝑠, 𝑎)
+<p align="center">
+  <img width="500" height="100" src="https://drive.google.com/file/d/1tmmh2-NjRPKskro69Hwo1vQjc2IqiY0I/view?usp=sharing">
+</p>
 
 We update weights of the critic network
-𝑊𝑘+1 = 𝑊𝑘 + α 𝜕𝐽/𝜕θ
+<p align="center">
+  <img width="500" height="100" src="https://drive.google.com/file/d/1EAoUKC-9KTx0oJwpxvIXowMOkqfEYxcB/view?usp=sharing">
+</p>
 
 
 ### Actor Network
