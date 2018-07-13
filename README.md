@@ -27,12 +27,12 @@ gradients obtained from the loss function. Also, remember that the actor network
 
 updated with the Deterministic Policy Gradient.
 <p align="center">
-  <img width="500" height="100" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/PG.PNG">
+  <img width="200" height="100" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/PG.PNG">
 </p>
 
 We update weights of the critic network
 <p align="center">
-  <img width="500" height="100" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/weights.PNG">
+  <img width="200" height="100" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/weights.PNG">
 </p>
 
 
