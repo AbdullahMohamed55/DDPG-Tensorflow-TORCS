@@ -19,7 +19,7 @@ DDPG uses this. Directly updating the actor and critic neural network weights wi
 
 Accordingly, here are the equations for the TD target and the loss function for the critic network.
 <p align="center">
-  <img width="500" height="100" src="https://drive.google.com/file/d/1mOrwPXPzCVY0DuFYoOh1Ea8MHPRGwKsL/view?usp=sharing">
+  <img width="500" height="100" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/loss.PNG">
 </p>
 
 Now, as mentioned above, the weights of the critic network can be updated with the
@@ -27,20 +27,21 @@ gradients obtained from the loss function. Also, remember that the actor network
 
 updated with the Deterministic Policy Gradient.
 <p align="center">
-  <img width="500" height="100" src="https://drive.google.com/file/d/1tmmh2-NjRPKskro69Hwo1vQjc2IqiY0I/view?usp=sharing">
+  <img width="500" height="100" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/PG.PNG">
 </p>
 
 We update weights of the critic network
 <p align="center">
-  <img width="500" height="100" src="https://drive.google.com/file/d/1EAoUKC-9KTx0oJwpxvIXowMOkqfEYxcB/view?usp=sharing">
+  <img width="500" height="100" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/weights.PNG">
 </p>
 
 
 ### Actor Network
-The actor network takes states. And we used for it 2 hidden layers with 300 and 600 hidden units. The output consists of 3 continuous actions, Steering, which is a single unit with tanh activation function. Acceleration, which is a single unit with sigmoid activation function. Brake, another single unit with sigmoid activation function, then we updated the Actor Network from the gradients computed from the Critic Network.
+The actor network takes states. And we used 2 hidden layers with 300 and 600 hidden units. The output consists of 3 continuous actions, Steering, which is a single unit with tanh activation function. Acceleration, which is a single unit with sigmoid activation function. Brake, another single unit with sigmoid activation function, then we updated the Actor Network from the gradients computed from the Critic Network.
 
 
 ### Critic Network
-The critic network takes both the states and action as inputs and outputs the Q-Value. We used 4 hidden layers with 300 then 600 hidden units for the states and 600 hidden units for the actions then the last hidden layer has 600 hidden units. 
+The critic network takes both the states and action as inputs, and outputs the Q-Value. 
+We used 4 hidden layers: 2 hidden layers with 300 then 600 hidden units for the states, and 600 hidden units for the actions then the last hidden layer has 600 hidden units merging the output of action and state hidden layers together. 
 
 
