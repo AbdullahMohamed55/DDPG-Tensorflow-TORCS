@@ -44,6 +44,6 @@ The actor network takes states. And we used 2 hidden layers with 300 and 600 hid
 The critic network takes both the states and action as inputs, and outputs the Q-Value. 
 
 We used 4 hidden layers: 
-* 2 hidden layers with 300 then 600 hidden units for the states  
+- 2 hidden layers with 300 then 600 hidden units for the states  
 - 600 hidden units for the actions 
 - the last hidden layer has 600 hidden units merging the output of action and state hidden layers together. 
