@@ -37,13 +37,13 @@ We update weights of the critic network
 
 
 ### Actor Network
-The actor network takes states. And we used 2 hidden layers with 300 and 600 hidden units. The output consists of 3 continuous actions, Steering, which is a single unit with tanh activation function. Acceleration, which is a single unit with sigmoid activation function. Brake, another single unit with sigmoid activation function, then we updated the Actor Network from the gradients computed from the Critic Network.
+The actor network takes states. And we used 2 hidden layers with 300 and 600 hidden units with relu activation function for both. The output consists of 3 continuous actions, Steering, which is a single unit with tanh activation function. Acceleration, which is a single unit with sigmoid activation function. Brake, another single unit with sigmoid activation function, then we updated the Actor Network from the gradients computed from the Critic Network.
 
 
 ### Critic Network
 The critic network takes both the states and action as inputs, and outputs the Q-Value. 
 
 We used 4 hidden layers: 
-- 2 hidden layers with 300 then 600 hidden units for the states  
-- 600 hidden units for the actions 
-- the last hidden layer has 600 hidden units merging the output of action and state hidden layers together. 
+- 2 hidden layers with 300 then 600 hidden units for the states, relu then linear activation function respectively.  
+- 1 hidden layer with 600 hidden units for the actions with linear activation function. 
+- the last hidden layer has 600 hidden units merging the output of action and state hidden layers together with relu activation function and the output is with linear activation function. 
