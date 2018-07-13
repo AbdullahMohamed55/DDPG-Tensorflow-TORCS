@@ -21,7 +21,11 @@ class Actor(object):
         self.net,self.weights = self.init_network("ActorNetwork")
         self.target_net,self.target_weights = self.init_network("ActorTarget_Network")
         self.init_ops()
-
+        
+        self.assigns = []
+        for w_agent, w_target in zip(self.weights, self.target_weights):
+            self.assigns.append(tf.assign(w_target, self.TAU * w_agent+ (1 - self.TAU)*w_target, validate_shape=True))
+        
         # config = tf.ConfigProto()
         # config.gpu_options.allow_growth = True
         # self.sess = tf.Session(config=config,graph = AG)
@@ -29,11 +33,8 @@ class Actor(object):
         
         
     def target_train(self):
-        assigns = []
-        for w_agent, w_target in zip(self.weights, self.target_weights):
-            assigns.append(tf.assign(w_target, self.TAU * w_agent+ (1 - self.TAU)*w_target, validate_shape=True))
-        self.sess.run(assigns)
-
+        self.sess.run(self.assigns)
+        
 
     
     def init_input(self):
@@ -57,8 +58,8 @@ class Actor(object):
     def init_network(self,name):
         with tf.variable_scope(name):
             # TODO initializer
-            L1 = tf.layers.dense(inputs=self.states,units=300,kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
-            L2 = tf.layers.dense(inputs=L1,units=600,kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
+            L1 = tf.layers.dense(inputs=self.states,name = 'dense1',units=300,kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
+            L2 = tf.layers.dense(inputs=L1,units=600,name = 'dense2',kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
             accelerate = tf.layers.dense(L2,1,activation=tf.nn.sigmoid,name="Accelerate")
             brake = tf.layers.dense(L2,1,activation=tf.nn.sigmoid,name="Brake")
             steer = tf.layers.dense(L2,1,activation=tf.nn.tanh,name="Steer")

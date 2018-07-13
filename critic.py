@@ -21,7 +21,10 @@ class Critic(object):
         self.net,self.weights = self.init_network("CriticNetwork")
         self.target_net,self.target_weights = self.init_network("CriticTarget_Network")
         self.init_ops()
-
+        self.assigns = []
+        for w_agent, w_target in zip(self.weights, self.target_weights):
+            self.assigns.append(tf.assign(w_target, self.TAU * w_agent+ (1 - self.TAU)*w_target, validate_shape=True))
+        
         # self.sess.run(tf.global_variables_initializer())
         
         
@@ -58,10 +61,9 @@ class Critic(object):
 
     
     def target_train(self):
-        assigns = []
-        for w_agent, w_target in zip(self.weights, self.target_weights):
-            assigns.append(tf.assign(w_target, self.TAU * w_agent+ (1 - self.TAU)*w_target, validate_shape=True))
-        self.sess.run(assigns)
+        
+        self.sess.run(self.assigns)
+        
     
     def init_input(self):
         with tf.variable_scope('Inputs'):
@@ -72,12 +74,12 @@ class Critic(object):
     def init_network(self,name):
         with tf.variable_scope(name):
             
-            L1 = tf.layers.dense(inputs=self.states,units=300,kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
-            L2 = tf.layers.dense(inputs=L1,units=600,kernel_initializer=tf.initializers.truncated_normal())
-            L3 = tf.layers.dense(inputs=self.actions,units=600,kernel_initializer=tf.initializers.truncated_normal())
+            L1 = tf.layers.dense(inputs=self.states,name='states_input',units=300,kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
+            L2 = tf.layers.dense(inputs=L1,units=600,name='states_dense1',kernel_initializer=tf.initializers.truncated_normal())
+            L3 = tf.layers.dense(inputs=self.actions,name='actions_input',units=600,kernel_initializer=tf.initializers.truncated_normal())
             con = tf.concat([L2,L3], axis=1, name="Concating")
-            L4 = tf.layers.dense(inputs=con,units=600,kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
-            out=  tf.layers.dense(inputs=L4,units=3,kernel_initializer=tf.initializers.truncated_normal())
+            L4 = tf.layers.dense(inputs=con,name='dense_2',units=600,kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
+            out=  tf.layers.dense(inputs=L4,name='out',units=3,kernel_initializer=tf.initializers.truncated_normal())
             weights = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=name)
             return out,weights
             # tf.add_to_collection('out',self.out)
