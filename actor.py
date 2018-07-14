@@ -58,11 +58,11 @@ class Actor(object):
     def init_network(self,name):
         with tf.variable_scope(name):
             # TODO initializer
-            L1 = tf.layers.dense(inputs=self.states,name = 'dense1',units=300,kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
-            L2 = tf.layers.dense(inputs=L1,units=600,name = 'dense2',kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
-            accelerate = tf.layers.dense(L2,1,activation=tf.nn.sigmoid,name="Accelerate")
-            brake = tf.layers.dense(L2,1,activation=tf.nn.sigmoid,name="Brake")
-            steer = tf.layers.dense(L2,1,activation=tf.nn.tanh,name="Steer")
+            L1 = tf.layers.dense(inputs=self.states,name = 'dense1',units=300,activation=tf.nn.relu)
+            L2 = tf.layers.dense(inputs=L1,units=600,name = 'dense2',activation=tf.nn.relu)
+            accelerate = tf.layers.dense(L2,1,activation=tf.nn.sigmoid,name="Accelerate",kernel_initializer=tf.random_uniform_initializer(-1e-4,1e-4))
+            brake = tf.layers.dense(L2,1,activation=tf.nn.sigmoid,name="Brake",kernel_initializer=tf.random_uniform_initializer(-1e-4,1e-4))
+            steer = tf.layers.dense(L2,1,activation=tf.nn.tanh,name="Steer",kernel_initializer=tf.random_uniform_initializer(-1e-4,1e-4))
             out= tf.concat([accelerate, brake, steer], axis=1, name="Actions")
             weights=tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=name)
             return out,weights

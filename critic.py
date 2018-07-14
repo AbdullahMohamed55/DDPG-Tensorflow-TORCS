@@ -51,7 +51,12 @@ class Critic(object):
             self.actions:batch[1],
             self.target_q:target_q
         })
-        # return self.sess.run(self.loss, feed_dict={
+        return self.sess.run(self.loss, feed_dict={
+            self.states: batch[0],
+            self.actions:batch[1],
+            self.target_q:target_q
+        })
+        # self.sess.run(self.acc, feed_dict={
         #     self.states: batch[0],
         #     self.actions:batch[1],
         #     self.target_q:target_q
@@ -61,7 +66,6 @@ class Critic(object):
 
     
     def target_train(self):
-        
         self.sess.run(self.assigns)
         
     
@@ -74,12 +78,12 @@ class Critic(object):
     def init_network(self,name):
         with tf.variable_scope(name):
             
-            L1 = tf.layers.dense(inputs=self.states,name='states_input',units=300,kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
-            L2 = tf.layers.dense(inputs=L1,units=600,name='states_dense1',kernel_initializer=tf.initializers.truncated_normal())
-            L3 = tf.layers.dense(inputs=self.actions,name='actions_input',units=600,kernel_initializer=tf.initializers.truncated_normal())
+            L1 = tf.layers.dense(inputs=self.states,name='states_input',units=300,activation=tf.nn.relu)
+            L2 = tf.layers.dense(inputs=L1,units=600,name='states_dense1')
+            L3 = tf.layers.dense(inputs=self.actions,name='actions_input',units=600)
             con = tf.concat([L2,L3], axis=1, name="Concating")
-            L4 = tf.layers.dense(inputs=con,name='dense_2',units=600,kernel_initializer=tf.initializers.truncated_normal(),activation=tf.nn.relu)
-            out=  tf.layers.dense(inputs=L4,name='out',units=3,kernel_initializer=tf.initializers.truncated_normal())
+            L4 = tf.layers.dense(inputs=con,name='dense_2',units=600 ,activation=tf.nn.relu)
+            out=  tf.layers.dense(inputs=L4,name='out',units=3)
             weights = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=name)
             return out,weights
             # tf.add_to_collection('out',self.out)
@@ -91,6 +95,7 @@ class Critic(object):
         # print("hey ",len(self.weights))
         # print("hey ",self.action_gradient.shape)
         self.target_q = tf.placeholder(tf.float64,[None,3], name='target_q')
+        self.acc = tf.metrics.accuracy(labels=self.target_q, predictions=self.net)
         self.loss = tf.reduce_mean(tf.squared_difference(self.target_q,self.net))
         self.optimize = tf.train.AdamOptimizer(self.LEARNING_RATE).minimize(self.loss)
         self.action_grads = tf.gradients(self.net, self.actions)  #GRADIENTS for policy update
