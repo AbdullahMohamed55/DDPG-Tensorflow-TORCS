@@ -1,7 +1,9 @@
+#importing libraries
 import tensorflow as tf
 import numpy as np
 import time
 
+#State and action dimensions
 state_dim= 29
 action_dim = 3
 
@@ -9,7 +11,6 @@ class Actor(object):
 
 
     def __init__(self,sess,BATCH_SIZE,TAU,LEARNING_RATE):
-    # def __init__(self,BATCH_SIZE,TAU,LEARNING_RATE):
         self.sess = sess
         self.BATCH_SIZE = BATCH_SIZE
         self.TAU = TAU
@@ -17,21 +18,22 @@ class Actor(object):
 
         # AG = tf.Graph()
         # with AG.as_default():
-        self.init_input()
-        self.net,self.weights = self.init_network("ActorNetwork")
+        self.init_input()          #Function to create the sensor readings placeholder
+        self.net,self.weights = self.init_network("ActorNetwork") #Creates the evaluate network and returns output actions and the weights used
         self.target_net,self.target_weights = self.init_network("ActorTarget_Network")
-        self.init_ops()
+        self.init_ops()            #Function containing the learning paradigm, contains the optimization of 
+                                   #weights using the gradients from critic network
         
-        self.assigns = []
-        for w_agent, w_target in zip(self.weights, self.target_weights):
-            self.assigns.append(tf.assign(w_target, self.TAU * w_agent+ (1 - self.TAU)*w_target, validate_shape=True))
+        self.assigns = []        #Changes target weights with the given evaluation weights slowly with TAU
+        for w_agent, w_target in zip(self.weights, self.target_weights):     # Loops over all weights and zips them together
+            self.assigns.append(tf.assign(w_target, self.TAU * w_agent+ (1 - self.TAU)*w_target, validate_shape=True))   
         
         # config = tf.ConfigProto()
         # config.gpu_options.allow_growth = True
         # self.sess = tf.Session(config=config,graph = AG)
         self.sess.run(tf.global_variables_initializer())
         
-        
+     #Training target by copying weights from evaluation network to target network with learning rate of TAU
     def target_train(self):
         self.sess.run(self.assigns)
         
@@ -41,20 +43,23 @@ class Actor(object):
         with tf.variable_scope('Inputs'):
             self.states = tf.placeholder(shape=[None,29],dtype=tf.float64, name='Sensor_readings')
             
-    
+    #Outputs actions using states (used for current states)
     def predict(self, states):
         return self.sess.run(self.net, feed_dict={
             self.states: states
         }) 
+    #Outputs actions using states (used for next states)
     def target_predict(self, states):
         return self.sess.run(self.target_net, feed_dict={
             self.states: states
-        })         
+        })
+    #Optimizes the network weights in the direction of the action gradients from the critic network
     def train(self, states, action_grads):
         self.sess.run(self.optimize, feed_dict={
             self.states: states,
             self.action_gradient: action_grads
         })
+    #Network architecture
     def init_network(self,name):
         with tf.variable_scope(name):
             # TODO initializer
