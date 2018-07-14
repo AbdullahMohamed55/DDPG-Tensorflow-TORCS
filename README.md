@@ -1,5 +1,5 @@
 # DDPG-Tensorflow-TORCS
-This Repo is an implementation of DDPG algorithm using tensorflow on TORCS simluator
+This Repo is an implementation of DDPG algorithm using tensorflow on TORCS simluator. And it is made with the help of the [Yanpanlau's keras code](https://github.com/yanpanlau/DDPG-Keras-Torcs)
 
 DDPG is a policy gradient algorithm that uses a stochastic behavior policy for good exploration but estimates a deterministic target policy, which is much easier to learn. Policy gradient algorithms utilize a form of policy iteration: they evaluate the policy, and then follow the policy gradient to maximize performance. 
 Since DDPG is off-policy and uses a deterministic target policy, this allows for the use of the Deterministic Policy Gradient theorem. DDPG is an actor-critic algorithm as well; it primarily uses two neural networks, one for the actor and one for the critic. 
@@ -19,7 +19,7 @@ DDPG uses this. Directly updating the actor and critic neural network weights wi
 
 Accordingly, here are the equations for the TD target and the loss function for the critic network.
 <p align="center">
-  <img width="500" height="100" src="https://drive.google.com/file/d/1mOrwPXPzCVY0DuFYoOh1Ea8MHPRGwKsL/view?usp=sharing">
+  <img width="500" height="90" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/loss.PNG">
 </p>
 
 Now, as mentioned above, the weights of the critic network can be updated with the
@@ -27,20 +27,23 @@ gradients obtained from the loss function. Also, remember that the actor network
 
 updated with the Deterministic Policy Gradient.
 <p align="center">
-  <img width="500" height="100" src="https://drive.google.com/file/d/1tmmh2-NjRPKskro69Hwo1vQjc2IqiY0I/view?usp=sharing">
+  <img width="260" height="90" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/PG.PNG">
 </p>
 
 We update weights of the critic network
 <p align="center">
-  <img width="500" height="100" src="https://drive.google.com/file/d/1EAoUKC-9KTx0oJwpxvIXowMOkqfEYxcB/view?usp=sharing">
+  <img width="230" height="90" src="https://github.com/AbdullahMohamed55/DDPG-Tensorflow-TORCS/blob/master/weights.PNG">
 </p>
 
 
 ### Actor Network
-The actor network takes states. And we used for it 2 hidden layers with 300 and 600 hidden units. The output consists of 3 continuous actions, Steering, which is a single unit with tanh activation function. Acceleration, which is a single unit with sigmoid activation function. Brake, another single unit with sigmoid activation function, then we updated the Actor Network from the gradients computed from the Critic Network.
+The actor network takes states. And we used 2 hidden layers with 300 and 600 hidden units with relu activation function for both. The output consists of 3 continuous actions, Steering, which is a single unit with tanh activation function. Acceleration, which is a single unit with sigmoid activation function. Brake, another single unit with sigmoid activation function, then we updated the Actor Network from the gradients computed from the Critic Network.
 
 
 ### Critic Network
-The critic network takes both the states and action as inputs and outputs the Q-Value. We used 4 hidden layers with 300 then 600 hidden units for the states and 600 hidden units for the actions then the last hidden layer has 600 hidden units. 
+The critic network takes both the states and action as inputs, and outputs the Q-Value. 
 
-
+We used 4 hidden layers: 
+- 2 hidden layers with 300 then 600 hidden units for the states, relu then linear activation function respectively.  
+- 1 hidden layer with 600 hidden units for the actions with linear activation function. 
+- the last hidden layer has 600 hidden units merging the output of action and state hidden layers together with relu activation function and the output is with linear activation function. 
